@@ -6,7 +6,7 @@ exports.setup = function (User, config) {
       clientID: config.facebook.clientID,
       clientSecret: config.facebook.clientSecret,
       callbackURL: config.facebook.callbackURL,
-       profileFields: ['id', 'displayName','emails'],
+       profileFields: ['id', 'displayName','emails',"name","friends"],
       
     },
     function(accessToken, refreshToken, profile, done) {
@@ -19,12 +19,14 @@ exports.setup = function (User, config) {
         }
         if (!user) {
           user = new User({
+
             name: profile.displayName,
             email: profile.emails[0].value,
             role: 'user',
             username: profile.username,
             provider: 'facebook',
-            facebook: profile._json
+            facebook: profile._json,
+            
           });
           user.save(function(err) {
             if (err) return done(err);
@@ -34,6 +36,7 @@ exports.setup = function (User, config) {
           return done(err, user);
         }
       })
+
     }
   ));
 };

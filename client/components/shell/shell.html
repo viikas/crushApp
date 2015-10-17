@@ -7,6 +7,7 @@
         <div layout-padding layout="column">
           <div class="profile-name">{{ getCurrentUser().name }}</div>
           <div class="profile-email">{{ getCurrentUser().email }}</div>
+          <div class="profile-provider">{{ getCurrentUser().facebook.token }}</div>
         </div>
       </div>
       

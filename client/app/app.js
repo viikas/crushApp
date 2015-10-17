@@ -35,6 +35,7 @@ angular.module('crushApp', [
 
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
+
   })
 
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
@@ -65,12 +66,13 @@ angular.module('crushApp', [
 
   .run(function ($rootScope, $location, Auth) {
     // Redirect to login if route requires auth and you're not logged in
-    $rootScope.$on('$stateChangeStart', function (event, next) {
-      Auth.isLoggedInAsync(function(loggedIn) {
-        if (next.authenticate && !loggedIn) {
-          event.preventDefault();
-          $location.path('/login');
-        }
-      });
-    });
-  });
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+          Auth.isLoggedInAsync(function(loggedIn) {
+            if (toState.authenticate && !loggedIn) {
+                  $rootScope.returnToState = toState.url;
+                  $rootScope.returnToStateParams = toParams.Id;
+                  $location.path('/login');
+              }
+          });
+        });
+   });
